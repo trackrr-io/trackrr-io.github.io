@@ -76,6 +76,27 @@
   &lt;/<span class="pl-ent">dependency</span>&gt;
 &lt;/<span class="pl-ent">dependencies</span>&gt;</pre></div>
 
+<div class="highlight highlight-source-java"><pre>        <span class="pl-k">final</span> <span class="pl-smi">String</span> gpsKey <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>XXXXXXXXXXXXXXX<span class="pl-pds">"</span></span>;
+        <span class="pl-k">final</span> <span class="pl-smi">String</span> secret <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>YYYYYYYYYYYYYYYYYYYYYYYYYYYY<span class="pl-pds">"</span></span>;
+        <span class="pl-k">final</span> <span class="pl-smi">GpsClientManager</span> client <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">GpsClientManager</span>(gpsKey, secret);
+        client<span class="pl-k">.</span>connect(<span class="pl-k">new</span> <span class="pl-smi">AWSIotMqttClientStatusCallback</span>() {
+            <span class="pl-k">@Override</span>
+            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onStatusChanged</span>(<span class="pl-k">final</span> <span class="pl-smi">AWSIotMqttClientStatus</span> <span class="pl-v">status</span>, <span class="pl-k">final</span> <span class="pl-smi">Throwable</span> <span class="pl-v">throwable</span>) {
+                <span class="pl-k">if</span> (status <span class="pl-k">==</span> <span class="pl-smi">AWSIotMqttClientStatus</span><span class="pl-k">.</span><span class="pl-smi">Connected</span>) {
+                    <span class="pl-k">final</span> <span class="pl-smi">Gps</span> gps <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Gps</span>();
+                    <span class="pl-k">final</span> <span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">String</span>&gt;</span> userData <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-k">HashMap&lt;&gt;</span>();
+                    gps<span class="pl-k">.</span>setGpsKey(gpsKey);
+                    gps<span class="pl-k">.</span>setCreatedDate(<span class="pl-smi">System</span><span class="pl-k">.</span>currentTimeMillis());
+                    gps<span class="pl-k">.</span>setUserData(userData);
+                    <span class="pl-k">final</span> <span class="pl-smi">Coords</span> coords <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Coords</span>();
+                    coords<span class="pl-k">.</span>setLatitude(<span class="pl-c1">33.79519271850586d</span>);
+                    coords<span class="pl-k">.</span>setLongitude(<span class="pl-k">-</span><span class="pl-c1">118.01104736328125d</span>);
+                    gps<span class="pl-k">.</span>setCoords(coords);
+                    client<span class="pl-k">.</span>publish(gps);
+                }
+            }
+        });</pre></div>
+
 <h2>
 <a id="android-sdk" class="anchor" href="#android-sdk" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Android SDK</h2>
 
